@@ -1,0 +1,39 @@
+<head>
+  <title>Shorty: Minimal link shortener</title>
+  <style>
+    #flashmsg { background: #D6B4FC; border-radius: 4px; text-align: center; padding: 10px 5px; }
+    #create div { margin: 10px 0; }
+    #create input[name=target] { width: 80%; }
+    main { width: 600px; margin: 80px auto 0; }
+    html { font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif; }
+    code { font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace; }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Shorty</h1>
+
+    {% if flashmsg %}
+      <div id="flashmsg">{{ flashmsg }}</div>
+    {% endif %}
+
+    <form method="POST" id="create" action="{{ url_for('create') }}"">
+      <h2>Create a short link</h2>
+      <div>
+        <label>
+          New short link: <code>{{ request.url_root }}</code>
+          <input name="key" value="{{ key }}" placeholder="my-short-link" required pattern="[A-Za-z]+.*" autofocus />
+        </label>
+      </div>
+      <div>
+        <label>Target:
+          <input name="target" value="{{ target }}" placeholder="https://..." required pattern="https?://.+" type="url" />
+        </label>
+      </div>
+      <div>
+        <input type="submit"/>
+      </div>
+    </form>
+  </main>
+</body>
