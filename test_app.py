@@ -1,7 +1,7 @@
 import os
+from unittest.mock import patch
 
 from absl.testing import absltest
-from unittest.mock import patch
 
 
 class AppTest(absltest.TestCase):
@@ -14,7 +14,8 @@ class AppTest(absltest.TestCase):
 
     def tearDown(self):
         self.environ_patch.__exit__()
-        from app import app, db
+        from app import app
+        from app import db
         with app.app_context():
             db.drop_all()
 

@@ -1,6 +1,7 @@
 # Shorty: a minimal link shortener
 
-...and also a place to demonstrate Python software development with Bazel.
+...and also a place to demonstrate
+modern Python software development with Bazel.
 
 Any client can:
 * Create a new short link
@@ -20,7 +21,7 @@ This app works best when running on an intranet with DNS set up so users can jus
 ### Run the app with a production-quality web server
 
 ```
-bazel run //:hypercorn -- --bind=0.0.0.0:0 app:app
+bazel run :hypercorn -- --bind=0.0.0.0:0 app:app
 ```
 
 You should see something like
@@ -39,31 +40,51 @@ e.g., to configure TLS, customize logging, etc.
 
 To take additional dependencies, add them to `requirements.base.in`, then run:
 ```
-bazel run //:compile_base_requirements
+bazel run :compile_base_requirements
 ```
 
-This updates `requirements.base.txt`, which specifies which dependencies
-are installed in the runtime environment.
+This re-compiles `requirements.base.txt` (a standard pip requirements lock file)
+based on your changed `requirements.base.in`.
 See the [pip-tools docs](https://pip-tools.readthedocs.io) if this is new to you.
 
 
 ## Interactive development
 
 To watch the code for changes and reload it automatically while you're developing,
-you can use [bazel-watcher](https://github.com/bazelbuild/bazel-watcher)
-(just replace `bazel` with `ibazel` in [the command above](#quick-start)).
+you can use [bazel-watcher](https://github.com/bazelbuild/bazel-watcher).
+Just replace `bazel` with `ibazel`.
+
+Examples:
+* `ibazel run :flask`
+* `ibazel test :test_app`
+
+
+## Linting
+
+Linting is provided via [rules_lint](https://github.com/aspect-build/rules_lint)
+and made more ergonomic via [aspect-cli](https://github.com/aspect-build/aspect-cli).
+
+Examples:
+* `bazel lint :app`
+* `bazel lint :all`
+
+![](./screenshot-lint.png)
+
+This can be set up as a pre-commit hook
+and as a PR merge check if desired.
 
 
 ## Running the tests
 
 ```
-bazel test //:test_app
+bazel test :test_app
 ```
+![](./screenshot-test.png)
 
 ## Measuring test coverage
 
 ```
-bazel coverage //:test_app
+bazel coverage :test_app
 ```
 
 Toward the end of the output, Bazel should print a path ending in coverage.dat.

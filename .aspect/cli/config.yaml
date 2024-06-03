@@ -1,0 +1,4 @@
+lint:
+  aspects:
+    # Format: <extension file label>%<aspect top-level name>
+    - //tools/lint:linters.bzl%ruff

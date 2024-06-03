@@ -40,3 +40,5 @@ py_test(
     )
     for i in ("base", "test")
 ]
+
+exports_files([".ruff.toml"])

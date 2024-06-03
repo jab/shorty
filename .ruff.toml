@@ -1,0 +1,40 @@
+preview = true
+line-length = 121
+
+[lint]
+extend-select = [
+  "A",
+  "ARG",
+  "B",
+  "BLE",
+  "E",
+  "F",
+  "FA",
+  "FLY",
+  "FURB",
+  "G",
+  "I",
+  "ICN",
+  "PERF",
+  "PGH",
+  "PIE",
+  "PTH",
+  "RET",
+  "RSE",
+  "RUF",
+  "SLOT",
+  "T20",
+  "TID",
+  "UP",
+  "W",
+  "YTT",
+]
+
+[lint.isort]
+force-single-line = true
+lines-after-imports = 2
+
+[format]
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+preview = true

@@ -1,5 +1,6 @@
 bazel_dep(name = "rules_python", dev_dependency = True, version = "0.32.2")
 bazel_dep(name = "rules_uv", version = "0.12.0")
+bazel_dep(name = "aspect_rules_lint", version = "1.0.0-rc3")
 
 PY_VER = "3.12"
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")

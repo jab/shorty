@@ -1,18 +1,28 @@
 """Shorty: A minimal link shortener."""
 
+from __future__ import annotations
+
 import os
 
-from flask import Flask, redirect, render_template, request
+from flask import Flask
+from flask import redirect
+from flask import render_template
+from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 from sqlalchemy.sql import func
 
 
 class ModelBase(DeclarativeBase):
     pass
 
+
 db = SQLAlchemy(model_class=ModelBase)
+
+
 class ShortLink(db.Model):
     key: Mapped[str] = mapped_column(primary_key=True)
     target: Mapped[str] = mapped_column()
@@ -29,6 +39,7 @@ app.config.from_mapping({k: os.getenv(k, v) for (k, v) in DEFAULT_CONFIG.items()
 db.init_app(app)
 with app.app_context():
     db.create_all()
+
 
 @app.route("/")
 @app.route("/<key>")
