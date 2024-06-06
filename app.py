@@ -81,3 +81,8 @@ def _render_create_page(flashmsg: str = "", key: str = "", target: str = "") -> 
     # We only ever display at most one flash message immediately when rendering our sole template.
     # So we use a simple template variable instead.
     return render_template("create.html.jinja", flashmsg=flashmsg, key=key, target=target)
+
+
+if __name__ == "__main__":
+    # Enable running directly (without Bazel), in case the user wants to Bring Their Own Environment.
+    app.run()

@@ -21,7 +21,7 @@ This app works best when running on an intranet with DNS set up so users can jus
 ### Run the app with a production-quality web server
 
 ```
-bazel run :hypercorn -- --bind=0.0.0.0:0 app:app
+bazel run :hypercorn -- --bind=:0 app:app
 ```
 
 You should see something like

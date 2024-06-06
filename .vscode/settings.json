@@ -1,0 +1,3 @@
+{
+    "python.defaultInterpreterPath": "bazel-bin/app.runfiles/.app.venv/bin/python",
+}
