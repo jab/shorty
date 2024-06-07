@@ -16,12 +16,35 @@ This app works best when running on an intranet with DNS set up so users can jus
 [go/my-short-link](https://go/my-short-link)
 
 
+This project currently demonstrates:
+
+* Hermetically building, running, and testing a Python app, as well as measuring code coverage.
+
+* Using [aspect_rules_py](https://github.com/aspect-build/rules_py),
+  so that e.g. VSCode can pick up the app's Python environment automatically
+  (once it's been created, e.g. via `bazel run :app`)
+
+* Using [rules_uv](https://github.com/theoremlp/rules_uv)
+  to compile requirements lock files extremely quickly.
+
+* Using [ruff](https://docs.astral.sh/ruff/) for linting and formatting Python code
+  via [aspect_rules_lint](https://github.com/aspect-build/rules_py).
+
+* Building an efficient container image for a Python application via
+  [rules_oci](https://github.com/bazel-contrib/rules_oci/blob/main/docs/python.md)
+  (confirmed with [dive](https://github.com/wagoodman/dive)).
+
+* Better `bazel` ergonomics via [Aspect CLI](https://docs.aspect.build/cli/).
+
+  Tip: make a symlink from e.g. ~/bin/bazel to a new enough
+  [bazelisk](https://github.com/bazelbuild/bazelisk).
+
+
 ## Quick start
 
-### Run the app with a production-quality web server
-
+Run the app:
 ```
-bazel run :hypercorn -- --bind=:0 app:app
+bazel run :app
 ```
 
 You should see something like
@@ -31,31 +54,36 @@ Running on http://0.0.0.0:... (CTRL + C to quit)
 toward the end of the output, and you can then point your browser
 at a corresponding address to try the app.
 
-See the [hypercorn docs](https://hypercorn.readthedocs.io/en/latest/how_to_guides/configuring.html#configuration-options)
-for other settings you may wish to change,
-e.g., to configure TLS, customize logging, etc.
 
+## Running the tests
 
-## Taking additional dependencies
-
-To take additional dependencies, add them to `requirements.base.in`, then run:
 ```
-bazel run :compile_base_requirements
+bazel test :test_app
+```
+![](./screenshot-test.png)
+
+
+## Measuring test coverage
+
+```
+bazel coverage :test_app
 ```
 
-This re-compiles `requirements.base.txt` (a standard pip requirements lock file)
-based on your changed `requirements.base.in`.
-See the [pip-tools docs](https://pip-tools.readthedocs.io) if this is new to you.
+Toward the end of the output, Bazel should print a path ending in coverage.dat.
+You can pass this to `genhtml` (commonly provided by the `lcov` package)
+to generate an html report from this coverage data.
+
+![](./screenshot-coverage.png)
 
 
 ## Interactive development
 
-To watch the code for changes and reload it automatically while you're developing,
+To watch the code for changes and reload changed files automatically while you're developing,
 you can use [bazel-watcher](https://github.com/bazelbuild/bazel-watcher).
 Just replace `bazel` with `ibazel`.
 
 Examples:
-* `ibazel run :flask`
+* `ibazel run :hypercorn -- -b :0 app:app`
 * `ibazel test :test_app`
 
 
@@ -74,27 +102,43 @@ This can be set up as a pre-commit hook
 and as a PR merge check if desired.
 
 
-## Running the tests
+## Taking additional dependencies
 
+To take additional dependencies, add them to `requirements.base.in`, then run:
 ```
-bazel test :test_app
-```
-![](./screenshot-test.png)
-
-## Measuring test coverage
-
-```
-bazel coverage :test_app
+bazel run :compile_base_requirements
 ```
 
-Toward the end of the output, Bazel should print a path ending in coverage.dat.
-You can pass this to `genhtml` (commonly provided by the `lcov` package)
-to generate an html report from this coverage data.
+This re-compiles `requirements.base.txt` (a standard pip requirements lock file)
+based on your changed `requirements.base.in`.
+See the [pip-tools docs](https://pip-tools.readthedocs.io) if this is new to you.
 
-![](./screenshot-coverage.png)
+
+## Build and run a container image
+
+1. Build the image: `bazel build :oci_image`
+
+1. Load it into podman: `podman load -i bazel-bin/oci_image`
+
+   This should output something like the following at the end:
+   ```
+   Loaded image: sha256:2eb15062c3199b82e92a53d3cb9b1da93d26176c9d7c02788a68356957aaa51c
+   ```
+
+1. Run it: `podman run 2eb1506`  (or whatever sha was output by the previous step)
 
 
 ## Notes
+
+* The production-quality server used is [hypercorn](https://hypercorn.rtfd.io).
+  You can access its CLI via `bazel run :hypercorn`,
+  passing any desired arguments after a `--`, e.g.
+  ```
+  bazel run :hypercorn -- --bind :0 app:app
+  ```
+  See the [hypercorn docs](https://hypercorn.readthedocs.io/en/latest/how_to_guides/configuring.html#configuration-options)
+  for other settings you may wish to change,
+  e.g., to configure TLS, customize logging, etc.
 
 * Exposing click-tracking metrics is a non-goal.
 

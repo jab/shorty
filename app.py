@@ -84,5 +84,13 @@ def _render_create_page(flashmsg: str = "", key: str = "", target: str = "") -> 
 
 
 if __name__ == "__main__":
-    # Enable running directly (without Bazel), in case the user wants to Bring Their Own Environment.
-    app.run()
+    try:
+        from hypercorn.asyncio import serve
+        from hypercorn.config import Config
+        import asyncio
+    except ImportError:
+        app.run(port=0)
+    else:
+        config = Config()
+        config.bind = ":0"
+        asyncio.run(serve(app, config))

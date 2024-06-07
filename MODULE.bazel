@@ -1,18 +1,21 @@
-bazel_dep(name = "rules_python", dev_dependency = True, version = "0.32.2")
+bazel_dep(name = "rules_python", version = "0.32.2", dev_dependency = True)
+
 bazel_dep(name = "rules_uv", version = "0.12.0")
 bazel_dep(name = "aspect_rules_lint", version = "1.0.0-rc3")
 bazel_dep(name = "aspect_rules_py", version = "0.7.3")
 
 PY_VER = "3.12"
+
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
     configure_coverage_tool = True,
-    python_version = PY_VER,
     is_default = True,
+    python_version = PY_VER,
 )
 use_repo(python, "python_{}".format(PY_VER.replace(".", "_")))
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+
 [
     pip.parse(
         hub_name = "pip_{}_deps".format(i),
@@ -21,4 +24,27 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
     )
     for i in ("base", "test")
 ]
+
 use_repo(pip, "pip_base_deps", "pip_test_deps")
+
+# For building an efficient container image:
+bazel_dep(name = "aspect_bazel_lib", version = "2.7.6")
+bazel_dep(name = "rules_oci", version = "1.7.5")
+
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "distroless_base",
+    digest = "sha256:786007f631d22e8a1a5084c5b177352d9dcac24b1e8c815187750f70b24a9fc6",
+    image = "gcr.io/distroless/base",
+    platforms = ["linux/amd64"],
+)
+use_repo(oci, "distroless_base")
+
+# Depend on a hermetic cc toolchain, which is required to build a container image.
+bazel_dep(
+    name = "hermetic_cc_toolchain",
+    version = "3.1.0",
+)
+toolchains = use_extension("@hermetic_cc_toolchain//toolchain:ext.bzl", "toolchains")
+use_repo(toolchains, "zig_sdk")
+register_toolchains("@zig_sdk//toolchain:linux_amd64_gnu.2.31")
