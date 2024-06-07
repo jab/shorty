@@ -22,3 +22,18 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
     for i in ("base", "test")
 ]
 use_repo(pip, "pip_base_deps", "pip_test_deps")
+
+# For building a container image:
+bazel_dep(name = "aspect_bazel_lib", version = "2.7.6")
+bazel_dep(name = "rules_oci", version = "1.7.5")
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "distroless_base",
+    # 'latest' is not reproducible, but it's convenient.
+    # During the build we print a WARNING message that includes recommended 'digest' and 'platforms'
+    # values which you can use here in place of 'tag' to pin for reproducibility.
+    tag = "latest",
+    image = "gcr.io/distroless/base",
+    platforms = ["linux/amd64"],
+)
+use_repo(oci, "distroless_base")
