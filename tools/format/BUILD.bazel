@@ -1,0 +1,18 @@
+load("@aspect_rules_lint//format:defs.bzl", "format_multirun", "format_test")
+
+package(default_visibility = ["//:__subpackages__"])
+
+format_multirun(
+    name = "format",
+    python = "//tools/lint:ruff",
+    starlark = "@buildifier_prebuilt//:buildifier",
+)
+
+format_test(
+    name = "format_test",
+    size = "small",
+    no_sandbox = True,
+    python = "//tools/lint:ruff",
+    starlark = "@buildifier_prebuilt//:buildifier",
+    workspace = "//:.ruff.toml",
+)

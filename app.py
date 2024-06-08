@@ -31,7 +31,7 @@ class ShortLink(db.Model):
 
 
 DEFAULT_CONFIG = {
-    "SQLALCHEMY_DATABASE_URI":  "sqlite:////tmp/shorty.db",
+    "SQLALCHEMY_DATABASE_URI": "sqlite:////tmp/shorty.db",
 }
 app = Flask(__name__)
 app.config.from_mapping({k: os.getenv(k, v) for (k, v) in DEFAULT_CONFIG.items()})
@@ -87,10 +87,11 @@ if __name__ == "__main__":
     try:
         from hypercorn.asyncio import serve
         from hypercorn.config import Config
-        import asyncio
     except ImportError:
         app.run(port=0)
     else:
+        import asyncio
+
         config = Config()
         config.bind = ":0"
         asyncio.run(serve(app, config))

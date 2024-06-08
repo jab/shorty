@@ -9,6 +9,7 @@ class AppTest(absltest.TestCase):
         self.environ_patch = patch.dict(os.environ, {"SQLALCHEMY_DATABASE_URI": "sqlite://"})
         self.environ_patch.__enter__()
         from app import app
+
         app.config.update(TESTING=True)
         self.client = app.test_client()
 
@@ -16,6 +17,7 @@ class AppTest(absltest.TestCase):
         self.environ_patch.__exit__()
         from app import app
         from app import db
+
         with app.app_context():
             db.drop_all()
 

@@ -28,6 +28,8 @@ This project currently demonstrates:
   to compile requirements lock files extremely quickly.
 
 * Using [ruff](https://docs.astral.sh/ruff/) for linting and formatting Python code
+  and [buildifier](https://github.com/bazelbuild/buildtools/blob/master/buildifier/README.md)
+  for formatting starlark,
   via [aspect_rules_lint](https://github.com/aspect-build/rules_py).
 
 * Building an efficient container image for a Python application via
@@ -87,14 +89,16 @@ Examples:
 * `ibazel test :test_app`
 
 
-## Linting
+## Linting and code formatting
 
-Linting is provided via [rules_lint](https://github.com/aspect-build/rules_lint)
-and made more ergonomic via [aspect-cli](https://github.com/aspect-build/aspect-cli).
+Linting and code formatting are provided via
+[rules_lint](https://github.com/aspect-build/rules_lint)
+(and made more ergonomic via [aspect-cli](https://github.com/aspect-build/aspect-cli)).
 
 Examples:
 * `bazel lint :app`
 * `bazel lint :all`
+* `bazel run //tools/format:format`
 
 ![](./screenshot-lint.png)
 
