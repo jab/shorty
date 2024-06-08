@@ -74,6 +74,7 @@ bazel coverage :test_app
 Toward the end of the output, Bazel should print a path ending in coverage.dat.
 You can pass this to `genhtml` (commonly provided by the `lcov` package)
 to generate an html report from this coverage data.
+See [bazel's coverage docs](https://bazel.build/configure/coverage) for more info.
 
 ![](./screenshot-coverage.png)
 
@@ -85,7 +86,7 @@ you can use [bazel-watcher](https://github.com/bazelbuild/bazel-watcher).
 Just replace `bazel` with `ibazel`.
 
 Examples:
-* `ibazel run :hypercorn -- -b :0 app:app`
+* `ibazel run :app`
 * `ibazel test :test_app`
 
 
