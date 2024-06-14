@@ -18,28 +18,24 @@ This app works best when running on an intranet with DNS set up so users can jus
 
 This project currently demonstrates:
 
-* Hermetically building, running, and testing a Python app, as well as measuring code coverage.
+* Hermetically building, running, testing, linting, and auto-formatting a Python codebase,
+  as well as measuring code coverage, using Bazel.
 
-* Using [aspect_rules_py](https://github.com/aspect-build/rules_py),
-  so that e.g. VSCode can pick up the app's Python environment automatically
-  (once it's been created, e.g. via `bazel run :app`)
+* Bazel managing the creation of native Python virtualenv's automatically,
+  such that e.g. VSCode can follow references across third-party imports.
 
-* Using [rules_uv](https://github.com/theoremlp/rules_uv)
-  to compile requirements lock files extremely quickly.
+* Using Bazel to drive `pytest` for an idiomatic Python testing experience.
 
-* Using [ruff](https://docs.astral.sh/ruff/) for linting and formatting Python code
+* Using Bazel to manage pip dependency lockfiles via `uv`
+  for extremely fast dependency resolution.
+
+* Using Bazel to hermetically fetch and drive
+  [ruff](https://docs.astral.sh/ruff/) for linting and formatting Python code,
   and [buildifier](https://github.com/bazelbuild/buildtools/blob/master/buildifier/README.md)
-  for formatting starlark,
-  via [aspect_rules_lint](https://github.com/aspect-build/rules_py).
+  for formatting Starlark.
 
 * Building an efficient container image for a Python application via
-  [rules_oci](https://github.com/bazel-contrib/rules_oci/blob/main/docs/python.md)
-  (confirmed with [dive](https://github.com/wagoodman/dive)).
-
-* Better `bazel` ergonomics via [Aspect CLI](https://docs.aspect.build/cli/).
-
-  Tip: make a symlink from e.g. ~/bin/bazel to a new enough
-  [bazelisk](https://github.com/bazelbuild/bazelisk).
+  [rules_oci](https://github.com/bazel-contrib/rules_oci/blob/main/docs/python.md).
 
 
 ## Quick start
@@ -60,7 +56,7 @@ at a corresponding address to try the app.
 ## Running the tests
 
 ```
-bazel test :test_app
+bazel test :app_test
 ```
 ![](./screenshot-test.png)
 
@@ -68,7 +64,7 @@ bazel test :test_app
 ## Measuring test coverage
 
 ```
-bazel coverage :test_app
+bazel coverage :app_test
 ```
 
 Toward the end of the output, Bazel should print a path ending in coverage.dat.
@@ -87,7 +83,7 @@ Just replace `bazel` with `ibazel`.
 
 Examples:
 * `ibazel run :app`
-* `ibazel test :test_app`
+* `ibazel test :app_test`
 
 
 ## Linting and code formatting
@@ -109,7 +105,8 @@ and as a PR merge check if desired.
 
 ## Taking additional dependencies
 
-To take additional dependencies, add them to `requirements.base.in`, then run:
+To take additional runtime dependencies,
+add them to `requirements.base.in`, then run:
 ```
 bazel run :compile_base_requirements
 ```
@@ -117,6 +114,9 @@ bazel run :compile_base_requirements
 This re-compiles `requirements.base.txt` (a standard pip requirements lock file)
 based on your changed `requirements.base.in`.
 See the [pip-tools docs](https://pip-tools.readthedocs.io) if this is new to you.
+
+The process of updating test-time dependencies is similar,
+except using the `test` equivalents instead of `base`.
 
 
 ## Build and run a container image
@@ -164,8 +164,7 @@ See the [pip-tools docs](https://pip-tools.readthedocs.io) if this is new to you
     You probably want the reverse proxy to force HTTPS while you're at it. OR:
 
   * Modify `app.py` to wrap `app.wsgi_app` in appropriate auth middleware
-    that performs authentication at the WSGI layer
-    (e.g., [wsgi-kerberos](https://github.com/deshaw/wsgi-kerberos)).
+    that performs authentication at the WSGI layer.
     Don't forget to [take the additional dependencies](#taking-additional-dependencies).
 
 * By default, a SQLite database will be created in `/tmp/shorty.db` to persist the data.

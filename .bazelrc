@@ -1,1 +1,28 @@
+common --incompatible_disallow_empty_glob
+
+build --experimental_reuse_sandbox_directories
+build --incompatible_default_to_explicit_init_py
+build --incompatible_remote_results_ignore_disk
+build --incompatible_strict_action_env
+build --keep_going
+build --sandbox_default_allow_network=false
+build --show_result=20
+build --nolegacy_external_runfiles
+
+test --incompatible_exclusive_test_sandboxed
+test --test_output=errors
+test --test_verbose_timeout_warnings
+test --experimental_fetch_all_coverage_outputs
+
 coverage --combined_report=lcov
+
+build --experimental_allow_tags_propagation
+fetch --experimental_allow_tags_propagation
+query --experimental_allow_tags_propagation
+
+# Use `bazel test --config=debug` to enable these settings:
+test:debug --test_output=streamed
+test:debug --test_strategy=exclusive
+test:debug --nocache_test_results
+
+try-import %workspace%/.user.bazelrc

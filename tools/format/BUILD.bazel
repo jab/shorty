@@ -1,6 +1,6 @@
 load("@aspect_rules_lint//format:defs.bzl", "format_multirun", "format_test")
 
-package(default_visibility = ["//:__subpackages__"])
+package(default_visibility = ["//visibility:public"])
 
 format_multirun(
     name = "format",

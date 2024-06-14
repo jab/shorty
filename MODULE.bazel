@@ -1,11 +1,11 @@
-bazel_dep(name = "rules_python", version = "0.32.2", dev_dependency = True)
-
-bazel_dep(name = "rules_uv", version = "0.12.0")
-bazel_dep(name = "aspect_rules_lint", version = "1.0.0-rc3")
+bazel_dep(name = "rules_python", version = "0.33.1")
 bazel_dep(name = "aspect_rules_py", version = "0.7.3")
+bazel_dep(name = "rules_uv", version = "0.14.0")
+bazel_dep(name = "aspect_rules_lint", version = "1.0.0-rc3")
 bazel_dep(name = "buildifier_prebuilt", version = "6.3.3")
 
 PY_VER = "3.12"
+PY_VER_ = PY_VER.replace(".", "_")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
@@ -13,7 +13,7 @@ python.toolchain(
     is_default = True,
     python_version = PY_VER,
 )
-use_repo(python, "python_{}".format(PY_VER.replace(".", "_")))
+use_repo(python, "python_{}".format(PY_VER_))
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 
@@ -28,9 +28,10 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 
 use_repo(pip, "pip_base_deps", "pip_test_deps")
 
+#####################################################################################
 # For building an efficient container image:
-bazel_dep(name = "aspect_bazel_lib", version = "2.7.6")
 bazel_dep(name = "rules_oci", version = "1.7.5")
+bazel_dep(name = "aspect_bazel_lib", version = "2.7.6")
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 oci.pull(
