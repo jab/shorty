@@ -1,19 +1,25 @@
 bazel_dep(name = "rules_python", version = "0.33.1")
 bazel_dep(name = "aspect_rules_py", version = "0.7.3")
-bazel_dep(name = "rules_uv", version = "0.14.0")
 bazel_dep(name = "aspect_rules_lint", version = "1.0.0-rc3")
+bazel_dep(name = "rules_multitool", version = "0.7.1")
 bazel_dep(name = "buildifier_prebuilt", version = "6.3.3")
+bazel_dep(name = "rules_uv", version = "999.999.999")
+
+# Pick up fix for https://github.com/theoremlp/rules_uv/issues/58 while it's not yet released:
+git_override(
+    module_name = "rules_uv",
+    commit = "b2b4b268514301f55912f6781c43e1bac82a1ad3",
+    remote = "https://github.com/theoremlp/rules_uv.git",
+)
 
 PY_VER = "3.12"
-PY_VER_ = PY_VER.replace(".", "_")
-
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
     configure_coverage_tool = True,
     is_default = True,
     python_version = PY_VER,
 )
-use_repo(python, "python_{}".format(PY_VER_))
+use_repo(python, "python_{}".format(PY_VER.replace(".", "_")))
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 
@@ -21,12 +27,18 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
     pip.parse(
         hub_name = "pip_{}_deps".format(i),
         python_version = PY_VER,
-        requirements_lock = "requirements.{}.txt".format(i),
+        requirements_lock = "//requirements:{}.txt".format(i),
     )
     for i in ("base", "test")
 ]
 
 use_repo(pip, "pip_base_deps", "pip_test_deps")
+
+#####################################################################################
+# For linters, formatters, and other tools:
+multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
+multitool.hub(lockfile = "//tools:tools.lock.json")
+use_repo(multitool, "multitool")
 
 #####################################################################################
 # For building an efficient container image:
@@ -43,10 +55,7 @@ oci.pull(
 use_repo(oci, "distroless_base")
 
 # Depend on a hermetic cc toolchain, which is required to build a container image.
-bazel_dep(
-    name = "hermetic_cc_toolchain",
-    version = "3.1.0",
-)
+bazel_dep(name = "hermetic_cc_toolchain", version = "3.1.0")
 
 toolchains = use_extension("@hermetic_cc_toolchain//toolchain:ext.bzl", "toolchains")
 use_repo(toolchains, "zig_sdk")

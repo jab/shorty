@@ -1,0 +1,16 @@
+load("@rules_uv//uv:pip.bzl", "pip_compile")
+
+pip_compile(
+    name = "compile_base_deps",
+    args = ["--no-build"],
+    requirements_in = "base.in",
+    requirements_txt = "base.txt",
+)
+
+pip_compile(
+    name = "compile_test_deps",
+    args = ["--no-build"],
+    data = ["base.txt"],
+    requirements_in = "test.in",
+    requirements_txt = "test.txt",
+)

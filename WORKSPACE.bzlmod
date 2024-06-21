@@ -1,6 +1,6 @@
-# Marker that this is the root of a Bazel workspace
 # This file shadows WORKSPACE.bazel under --enable_bzlmod.
-# TODO: Can this be ported to MODULE.bazel instead?
+# Move the following into MODULE.bazel once the following is fixed:
+# https://github.com/aspect-build/aspect-workflows-template/issues/70
 
 load("@aspect_rules_lint//lint:ruff.bzl", "fetch_ruff")
 

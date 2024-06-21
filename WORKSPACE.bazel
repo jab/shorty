@@ -1,0 +1,2 @@
+# This project uses bzlmod rather than WORKSPACE files (see ./MODULE.bazel).
+# Keep this file here until we pick up the fix for https://github.com/bazelbuild/bazel-watcher/issues/646

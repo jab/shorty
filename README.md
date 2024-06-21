@@ -18,8 +18,8 @@ This app works best when running on an intranet with DNS set up so users can jus
 
 This project currently demonstrates:
 
-* Hermetically building, running, testing, linting, and auto-formatting a Python codebase,
-  as well as measuring code coverage, using Bazel.
+* Hermetically building, running, testing, type checking, linting, and auto-formatting
+  a Python codebase, as well as measuring code coverage, using Bazel.
 
 * Bazel managing the creation of native Python virtualenv's automatically,
   such that e.g. VSCode can follow references across third-party imports.
@@ -29,7 +29,7 @@ This project currently demonstrates:
 * Using Bazel to manage pip dependency lockfiles via `uv`
   for extremely fast dependency resolution.
 
-* Using Bazel to hermetically fetch and drive
+* Using Bazel to hermetically fetch and drive mypy for type checking,
   [ruff](https://docs.astral.sh/ruff/) for linting and formatting Python code,
   and [buildifier](https://github.com/bazelbuild/buildtools/blob/master/buildifier/README.md)
   for formatting Starlark.
@@ -51,6 +51,14 @@ Running on http://0.0.0.0:... (CTRL + C to quit)
 ```
 toward the end of the output, and you can then point your browser
 at a corresponding address to try the app.
+
+
+## Type checking
+
+```
+bazel run :mypy -- *.py
+```
+![](./screenshot-mypy.png)
 
 
 ## Running the tests
@@ -93,9 +101,9 @@ Linting and code formatting are provided via
 (and made more ergonomic via [aspect-cli](https://github.com/aspect-build/aspect-cli)).
 
 Examples:
-* `bazel lint :app`
-* `bazel lint :all`
 * `bazel run //tools/format:format`
+* `aspect lint :app`
+* `aspect lint :all`
 
 ![](./screenshot-lint.png)
 
@@ -106,17 +114,17 @@ and as a PR merge check if desired.
 ## Taking additional dependencies
 
 To take additional runtime dependencies,
-add them to `requirements.base.in`, then run:
+add them to `requirements/base.in`, then run:
 ```
-bazel run :compile_base_requirements
+bazel run //requirements:compile_base_deps
 ```
 
-This re-compiles `requirements.base.txt` (a standard pip requirements lock file)
-based on your changed `requirements.base.in`.
+This re-compiles `requirements/base.txt` (a standard pip requirements lock file)
+based on your changed `requirements/base.in`.
 See the [pip-tools docs](https://pip-tools.readthedocs.io) if this is new to you.
 
 The process of updating test-time dependencies is similar,
-except using the `test` equivalents instead of `base`.
+except using the corresponding `test` files and targets instead of `base`.
 
 
 ## Build and run a container image
@@ -139,7 +147,7 @@ except using the `test` equivalents instead of `base`.
   You can access its CLI via `bazel run :hypercorn`,
   passing any desired arguments after a `--`, e.g.
   ```
-  bazel run :hypercorn -- --bind :0 app:app
+  bazel run :hypercorn -- 'app:create_app()'
   ```
   See the [hypercorn docs](https://hypercorn.readthedocs.io/en/latest/how_to_guides/configuring.html#configuration-options)
   for other settings you may wish to change,
@@ -168,15 +176,10 @@ except using the `test` equivalents instead of `base`.
     Don't forget to [take the additional dependencies](#taking-additional-dependencies).
 
 * By default, a SQLite database will be created in `/tmp/shorty.db` to persist the data.
-  To customize this, set the `SQLALCHEMY_DATABASE_URI` environment variable
-  to the database connection string you desire before running the app:
+  To customize this, set the `SQLITE_DB_URI` environment variable
+  to the [SQLite database URI](https://docs.python.org/3/library/sqlite3.html#sqlite3-uri-tricks)
+  you desire before running the app:
 
   ```
-  export SQLALCHEMY_DATABASE_URI="sqlite:////path/to/shorty.db"
+  export SQLITE_DB_URI="file:memory?mode=memory&cache=shared"
   ```
-
-  To use a database other than SQLite, set the connection string appropriately
-  (e.g., `postgres:///...`), and then
-  [take the additional dependencies](#taking-additional-dependencies) (e.g., `psycopg`) as necessary.
-  See the [sqlalchemy docs](https://docs.sqlalchemy.org/en/20/core/engines.html)
-  if this is new to you.
