@@ -16,15 +16,15 @@ This app works best when running on an intranet with DNS set up so users can jus
 [go/my-short-link](https://go/my-short-link)
 
 
-This project currently demonstrates:
+This project demonstrates:
 
 * Hermetically building, running, testing, type checking, linting, and auto-formatting
   a Python codebase, as well as measuring code coverage, using Bazel.
 
-* Bazel managing the creation of native Python virtualenv's automatically,
-  such that e.g. VSCode can follow references across third-party imports.
+* Bazel managing the creation of native Python virtualenvs automatically,
+  with local VSCode configuration to find the app's Python environment out-of-the-box.
 
-* Using Bazel to drive `pytest` for an idiomatic Python testing experience.
+* Using Bazel to drive `pytest` for a more idiomatic Python testing experience.
 
 * Using Bazel to manage pip dependency lockfiles via `uv`
   for extremely fast dependency resolution.
