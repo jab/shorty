@@ -87,11 +87,11 @@ See [bazel's coverage docs](https://bazel.build/configure/coverage) for more inf
 
 To watch the code for changes and reload changed files automatically while you're developing,
 you can use [bazel-watcher](https://github.com/bazelbuild/bazel-watcher).
-Just replace `bazel` with `ibazel`.
+Just replace `bazel` with `tools/ibazel`.
 
 Examples:
-* `ibazel run :app`
-* `ibazel test :app_test`
+* `tools/ibazel run :app`
+* `tools/ibazel test :app_test`
 
 
 ## Linting and code formatting
