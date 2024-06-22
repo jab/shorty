@@ -47,7 +47,7 @@ bazel run :app
 
 You should see something like
 ```
-Running on http://0.0.0.0:... (CTRL + C to quit)
+Running on http://0.0.0.0:8675 (CTRL + C to quit)
 ```
 toward the end of the output, and you can then point your browser
 at a corresponding address to try the app.
@@ -56,7 +56,7 @@ at a corresponding address to try the app.
 ## Type checking
 
 ```
-bazel run :mypy -- *.py
+bazel run :mypy
 ```
 ![](./screenshot-mypy.png)
 
@@ -138,7 +138,11 @@ except using the corresponding `test` files and targets instead of `base`.
    Loaded image: sha256:2eb15062c3199b82e92a53d3cb9b1da93d26176c9d7c02788a68356957aaa51c
    ```
 
-1. Run it: `podman run 2eb1506`  (or whatever sha was output by the previous step)
+1. Run it: `podman run --publish=8675:8675 2eb1`
+   (replace 28b1 whatever sha was output by the previous step)
+
+1. You should now be able to access the server running inside the container:
+   `curl localhost:8675`
 
 
 ## Notes

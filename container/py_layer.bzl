@@ -1,4 +1,5 @@
-# https://github.com/aspect-build/bazel-examples/blob/2e9f9314/oci_python_image/py_layer.bzl
+# Based on https://github.com/aspect-build/bazel-examples/blob/2e9f9314/oci_python_image/py_layer.bzl
+# Once https://github.com/aspect-build/rules_py/issues/212 is fixed we can use that instead.
 "Wrapper macro to make three separate layers for python applications"
 
 load("@aspect_bazel_lib//lib:tar.bzl", "mtree_spec", "tar")
