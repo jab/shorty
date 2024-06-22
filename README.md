@@ -129,7 +129,7 @@ except using the corresponding `test` files and targets instead of `base`.
 
 ## Build and run a container image
 
-1. Build the image: `bazel build :oci_image`
+1. Build the image: `bazel build //container:oci_image`
 
 1. Load it into podman: `podman load -i bazel-bin/oci_image`
 
