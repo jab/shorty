@@ -139,7 +139,7 @@ except using the corresponding `test` files and targets instead of `base`.
    ```
 
 1. Run it: `podman run --publish=8675:8675 2eb1`
-   (replace 28b1 whatever sha was output by the previous step)
+   (replace 28b1 with whatever sha was output by the previous step)
 
 1. You should now be able to access the server running inside the container:
    `curl localhost:8675`
