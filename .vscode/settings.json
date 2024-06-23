@@ -1,5 +1,5 @@
 {
-    "python.defaultInterpreterPath": "bazel-bin/app.runfiles/.app.venv/bin/python",
+    "python.defaultInterpreterPath": "bazel-bin/app.dev.runfiles/.app.dev.venv/bin/python",
     "search.exclude": {
         "**/bazel-*": true
     },
@@ -10,4 +10,13 @@
         "**/bazel-*": true
     },
     "bazel.buildifierExecutable": "@buildifier_prebuilt//:buildifier",
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+    "explorer.excludeGitIgnore": true,
+    "python.analysis.exclude": [
+        "bazel-*/**"
+    ],
 }

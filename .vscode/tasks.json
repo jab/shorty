@@ -2,20 +2,31 @@
   "version": "2.0.0",
   "tasks": [
     {
-      // Run `bazel run :app` on folderOpen to ensure that a venv gets created automatically
-      // that VSCode can recognize as the environment that has all dependencies installed.
-      // See also ./settings.json, which sets python.defaultInterpreterPath to the bin/python of
-      // the venv that this creates.
       "label": "Run app (watching for changes)",
-      "command": "./tools/ibazel run //:app",
+      "command": "./tools/ibazel run //:app.dev",
       "presentation": {
         "reveal": "always",
         "panel": "new"
       },
       "runOptions": {
-        "runOn": "folderOpen",
+        "runOn": "folderOpen"
       },
       "type": "shell",
+      "problemMatcher": []
     },
+    {
+      "label": "Test app",
+      "command": "./tools/ibazel run //:app_test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "type": "shell",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    }
   ]
 }

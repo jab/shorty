@@ -60,9 +60,8 @@ Response = str | tuple[str, int] | flask.Response | werkzeug.Response
 @bp.route("/")
 @bp.route("/<key>")
 def redirect_or_render_create_form(key: str = "") -> Response:
-    if key:
-        if target := target_for(key):
-            return redirect(target)
+    if key and (target := target_for(key)):
+        return redirect(target)
     return _render_create_page(key=key)
 
 
@@ -94,15 +93,27 @@ def _render_create_page(flashmsg: str = "", key: str = "", target: str = "") -> 
 
 if __name__ == "__main__":
     DEFAULT_PORT = 8675
-    app = create_app()
-    try:
-        from hypercorn.asyncio import serve
-        from hypercorn.config import Config
-    except ImportError:
-        app.run(port=DEFAULT_PORT)
-    else:
-        import asyncio
 
-        config = Config()
-        config.bind = [os.getenv("BIND", f":{DEFAULT_PORT}")]
-        asyncio.run(serve(app, config))
+    app = create_app()
+
+    # In development mode, use Flask's single-threaded dev server instead of hypercorn:
+    if os.getenv("FLASK_ENV") == "development":
+        # Demo how to use VSCode's Python debugger, which requires waiting for the user to connect a client as follows:
+        # 1. Invoke "Debug: Start Debugging"
+        # 2. Choose "attach to remote debugger" option
+        # 3. Use "localhost" and the port debugpy listens on below.
+        # VSCode will then connect to the debugpy server and allow setting breakpoints, etc.
+        # The "WERKZEUG_RUN_MAIN" check avoids starting the debugpy server twice when using Flask's reloader.
+        # if not os.getenv("WERKZEUG_RUN_MAIN"):
+        #     import debugpy; print("Waiting for debugpy client..."); debugpy.listen(5678); debugpy.wait_for_client()
+
+        app.run(port=DEFAULT_PORT)
+        raise SystemExit
+
+    import asyncio  # noqa: I001
+    from hypercorn.asyncio import serve
+    from hypercorn.config import Config
+
+    config = Config()
+    config.bind = [os.getenv("BIND", f":{DEFAULT_PORT}")]
+    asyncio.run(serve(app, config))

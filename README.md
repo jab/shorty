@@ -24,7 +24,14 @@ This project demonstrates:
 * Bazel managing the creation of native Python virtualenvs automatically,
   with local VSCode configuration to find the app's Python environment out-of-the-box.
 
-* Using Bazel to drive `pytest` for a more idiomatic Python testing experience.
+* Project-local VSCode configuration to enable e.g.
+  discovering the Python environment that Bazel manages
+  (so you can "go to definition" across third-party imports),
+  discovering tests and running them via VSCode's "Testing" UI,
+  and using the VSCode Python debugger, out-of-the-box.
+
+* Using `pytest` via Bazel, with associated VSCode integration,
+  for an idiomatic Python testing experience.
 
 * Using Bazel to manage pip dependency lockfiles via `uv`
   for extremely fast dependency resolution.
@@ -123,8 +130,8 @@ This re-compiles `requirements/base.txt` (a standard pip requirements lock file)
 based on your changed `requirements/base.in`.
 See the [pip-tools docs](https://pip-tools.readthedocs.io) if this is new to you.
 
-The process of updating test-time dependencies is similar,
-except using the corresponding `test` files and targets instead of `base`.
+The process of updating test- and dev-time dependencies is similar,
+except using the corresponding requirements files and targets instead of `base`.
 
 
 ## Build and run a container image

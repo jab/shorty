@@ -7,10 +7,13 @@ pip_compile(
     requirements_txt = "base.txt",
 )
 
-pip_compile(
-    name = "compile_test_deps",
-    args = ["--no-build"],
-    data = ["base.txt"],
-    requirements_in = "test.in",
-    requirements_txt = "test.txt",
-)
+[
+    pip_compile(
+        name = "compile_{}_deps".format(i),
+        args = ["--no-build"],
+        data = ["base.txt"],
+        requirements_in = "{}.in".format(i),
+        requirements_txt = "{}.txt".format(i),
+    )
+    for i in ("test", "dev")
+]

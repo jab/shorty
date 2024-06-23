@@ -30,10 +30,10 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
         python_version = PY_VER,
         requirements_lock = "//requirements:{}.txt".format(i),
     )
-    for i in ("base", "test")
+    for i in ("base", "test", "dev")
 ]
 
-use_repo(pip, "pip_base_deps", "pip_test_deps")
+use_repo(pip, "pip_base_deps", "pip_test_deps", "pip_dev_deps")
 
 #####################################################################################
 # For linters, formatters, and other tools:
