@@ -24,5 +24,9 @@ query --experimental_allow_tags_propagation
 test:debug --test_output=streamed
 test:debug --test_strategy=exclusive
 test:debug --nocache_test_results
+# Ditto for `bazel coverage --config=debug`:
+coverage:debug --test_output=streamed
+coverage:debug --test_strategy=exclusive
+coverage:debug --nocache_test_results
 
 try-import %workspace%/.user.bazelrc

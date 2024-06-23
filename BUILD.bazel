@@ -27,8 +27,11 @@ py_binary(
     name = "app.dev",
     srcs = ["app.py"],
     data = [":templates"],
+    env = {
+        "FLASK_DEBUG": "1",
+        "WERKZEUG_DEBUG_PIN": "off",
+    },
     visibility = ["//visibility:public"],
-    env = {"FLASK_ENV": "development", "FLASK_DEBUG": "1"},
     deps = base_deps + test_deps + dev_deps,
 )
 
@@ -37,14 +40,22 @@ py_pytest_main(
     deps = ["@pip_test_deps//pytest:pkg"],
 )
 
-py_test(
-    name = "app_test",
-    timeout = "short",
-    srcs = [":__test__"] + glob(["*_test.py"]),
-    main = ":__test__.py",
-    data = ["pytest.ini"],
-    deps = [":app"] + test_deps,
-)
+py_test_name_by_src = {i: i.replace(".py", "") for i in glob(["*_test.py"])}
+
+[
+    py_test(
+        name = name,
+        timeout = "short",
+        srcs = [
+            "conftest.py",
+            ":__test__",
+            src,
+        ],
+        main = ":__test__.py",
+        deps = [":app"] + test_deps,
+    )
+    for (src, name) in py_test_name_by_src.items()
+]
 
 [
     py_console_script_binary(
@@ -58,17 +69,11 @@ py_test(
 
 py_console_script_binary(
     name = "mypy",
-    args = [
-        "app.py",
-        "app_test.py",
-    ],
+    args = glob(["*.py"]),
     binary_rule = py_test,
     data = [":mypy.ini"],
     pkg = "@pip_test_deps//mypy",
-    deps = [
-        ":app",
-        ":app_test",
-    ],
+    deps = [":app"] + py_test_name_by_src.values(),
 )
 
 filegroup(

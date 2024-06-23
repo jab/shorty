@@ -33,7 +33,7 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
     for i in ("base", "test", "dev")
 ]
 
-use_repo(pip, "pip_base_deps", "pip_test_deps", "pip_dev_deps")
+use_repo(pip, "pip_base_deps", "pip_dev_deps", "pip_test_deps")
 
 #####################################################################################
 # For linters, formatters, and other tools:

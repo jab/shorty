@@ -71,7 +71,7 @@ bazel run :mypy
 ## Running the tests
 
 ```
-bazel test :app_test
+bazel test ...
 ```
 ![](./screenshot-test.png)
 
@@ -98,7 +98,7 @@ Just replace `bazel` with `tools/ibazel`.
 
 Examples:
 * `tools/ibazel run :app.dev`
-* `tools/ibazel test :app_test`
+* `tools/ibazel test ...`
 
 Better yet, just open this project in VSCode. It's configured to automatically start
 the Flask dev server (with the debugger enabled) upon opening this project,
@@ -204,5 +204,6 @@ except using the corresponding requirements files and targets instead of `base`.
   you desire before running the app:
 
   ```
+  export SQLITE_DB_URI="file:path/to/shorty.db"  # or...
   export SQLITE_DB_URI="file:memory?mode=memory&cache=shared"
   ```

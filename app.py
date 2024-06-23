@@ -71,12 +71,12 @@ def create() -> Response:
     target = request.form.get("target", "")
     if not key or not target:
         flashmsg = "Error: Key or target missing for short link"
-        return _render_create_page(flashmsg=flashmsg, key=key)
+        return _render_create_page(flashmsg=flashmsg, key=key), 400
     try:
         insert(key, target)
     except sqlite3.IntegrityError:
         flashmsg = f"Error: Short link '{key}' already exists. Try another."
-        return _render_create_page(flashmsg=flashmsg, target=target)
+        return _render_create_page(flashmsg=flashmsg, target=target), 400
     else:
         msg = f"<p>Short link created: <a href='{target}'>{request.url_root}{key}</a></p>"
         msg += f"<p><a href='{request.url_root}'>Home</a></p>"
@@ -91,23 +91,20 @@ def _render_create_page(flashmsg: str = "", key: str = "", target: str = "") -> 
     return render_template("create.html.jinja", flashmsg=flashmsg, key=key, target=target)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     DEFAULT_PORT = 8675
 
     app = create_app()
 
-    # In development mode, use Flask's single-threaded dev server instead of hypercorn:
-    if os.getenv("FLASK_ENV") == "development":
+    # In debug mode, use Flask's single-threaded dev server instead of hypercorn:
+    if app.debug:  # True if the FLASK_DEBUG env var is set
         # Demo how to use VSCode's Python debugger, which requires waiting for the user to connect a client as follows:
         # 1. Invoke "Debug: Start Debugging"
         # 2. Choose "attach to remote debugger" option
         # 3. Use "localhost" and the port debugpy listens on below.
         # VSCode will then connect to the debugpy server and allow setting breakpoints, etc.
-        # The "WERKZEUG_RUN_MAIN" check avoids starting the debugpy server twice when using Flask's reloader.
-        # if not os.getenv("WERKZEUG_RUN_MAIN"):
-        #     import debugpy; print("Waiting for debugpy client..."); debugpy.listen(5678); debugpy.wait_for_client()
-
-        app.run(port=DEFAULT_PORT)
+        # import debugpy; print("Waiting for debugpy client..."); debugpy.listen(5678); debugpy.wait_for_client()
+        app.run(port=DEFAULT_PORT, use_reloader=False)  # prefer ibazel's reloader
         raise SystemExit
 
     import asyncio  # noqa: I001
