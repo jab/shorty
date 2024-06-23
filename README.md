@@ -97,8 +97,20 @@ you can use [bazel-watcher](https://github.com/bazelbuild/bazel-watcher).
 Just replace `bazel` with `tools/ibazel`.
 
 Examples:
-* `tools/ibazel run :app`
+* `tools/ibazel run :app.dev`
 * `tools/ibazel test :app_test`
+
+Better yet, just open this project in VSCode. It's configured to automatically start
+the Flask dev server (with the debugger enabled) upon opening this project,
+using ibazel to watch for changes.
+
+
+## VSCode Debugger Integration
+
+Search for "Demo how to use VSCode's Python debugger" in `app.py`,
+follow the instructions in the comment, and uncomment out the associated code.
+
+![](./screenshot-debugger.png)
 
 
 ## Linting and code formatting
