@@ -79,10 +79,10 @@ bazel test ...
 ## Measuring test coverage
 
 ```
-bazel coverage :app_test
+bazel coverage ...
 ```
 
-Toward the end of the output, Bazel should print a path ending in coverage.dat.
+In the output, Bazel should mention the path `bazel-out/_coverage/_coverage_report.dat`.
 You can pass this to `genhtml` (commonly provided by the `lcov` package)
 to generate an html report from this coverage data.
 See [bazel's coverage docs](https://bazel.build/configure/coverage) for more info.

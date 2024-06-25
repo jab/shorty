@@ -11,10 +11,11 @@ build --nolegacy_external_runfiles
 
 test --incompatible_exclusive_test_sandboxed
 test --test_output=errors
-test --test_verbose_timeout_warnings
 test --experimental_fetch_all_coverage_outputs
+# test --test_verbose_timeout_warnings
 
 coverage --combined_report=lcov
+coverage --test_tag_filters=-no_coverage
 
 build --experimental_allow_tags_propagation
 fetch --experimental_allow_tags_propagation

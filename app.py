@@ -79,7 +79,7 @@ def create() -> Response:
         return _render_create_page(flashmsg=flashmsg, target=target), 400
     else:
         msg = f"<p>Short link created: <a href='{target}'>{request.url_root}{key}</a></p>"
-        msg += f"<p><a href='{request.url_root}'>Home</a></p>"
+        msg += f"<p><a href='{request.url_root}'>home</a></p>"
         return f"<center>{msg}</center>", 201
 
 
