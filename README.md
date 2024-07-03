@@ -150,7 +150,7 @@ except using the corresponding requirements files and targets instead of `base`.
 
 1. Build the image: `bazel build //container:oci_image`
 
-1. Load it into podman: `podman load -i bazel-bin/oci_image`
+1. Load it into podman: `podman load -i bazel-bin/container/oci_image`
 
    This should output something like the following at the end:
    ```
