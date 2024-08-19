@@ -1,7 +1,0 @@
-# This file shadows WORKSPACE.bazel under --enable_bzlmod.
-# Move the following into MODULE.bazel once the following is fixed:
-# https://github.com/aspect-build/aspect-workflows-template/issues/70
-
-load("@aspect_rules_lint//lint:ruff.bzl", "fetch_ruff")
-
-fetch_ruff()

@@ -1,9 +1,9 @@
-bazel_dep(name = "rules_python", version = "0.33.1")
-bazel_dep(name = "aspect_rules_py", version = "0.7.3")
-bazel_dep(name = "aspect_rules_lint", version = "1.0.0-rc3")
-bazel_dep(name = "rules_multitool", version = "0.7.1")
-bazel_dep(name = "buildifier_prebuilt", version = "6.3.3")
-bazel_dep(name = "rules_uv", version = "0.15.0")
+bazel_dep(name = "rules_python", version = "0.35.0")
+bazel_dep(name = "aspect_rules_py", version = "0.7.4")
+bazel_dep(name = "aspect_rules_lint", version = "1.0.0-rc9")
+bazel_dep(name = "rules_multitool", version = "0.12.0")
+bazel_dep(name = "buildifier_prebuilt", version = "7.1.2")
+bazel_dep(name = "rules_uv", version = "0.25.0")
 
 PY_VER = "3.12"
 
@@ -36,8 +36,8 @@ use_repo(multitool, "multitool")
 
 #####################################################################################
 # For building an efficient container image:
-bazel_dep(name = "rules_oci", version = "1.7.5")
-bazel_dep(name = "aspect_bazel_lib", version = "2.7.6")
+bazel_dep(name = "rules_oci", version = "2.0.0-beta1")
+bazel_dep(name = "aspect_bazel_lib", version = "2.8.0")
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 oci.pull(
@@ -52,7 +52,7 @@ oci.pull(
         "linux/s390x",
     ],
 )
-use_repo(oci, "ubuntu")
+use_repo(oci, "ubuntu", "ubuntu_linux_amd64", "ubuntu_linux_arm64_v8", "ubuntu_linux_arm_v7", "ubuntu_linux_ppc64le", "ubuntu_linux_s390x")
 
 # Depend on a hermetic cc toolchain, which is required to build a container image.
 bazel_dep(name = "hermetic_cc_toolchain", version = "3.1.0")

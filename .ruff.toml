@@ -32,6 +32,7 @@ extend-select = [
 
 [lint.isort]
 force-single-line = true
+known-first-party = ["app"]
 lines-after-imports = 2
 
 [format]
