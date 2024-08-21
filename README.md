@@ -16,32 +16,40 @@ This app works best when running on an intranet with DNS set up so users can jus
 [go/my-short-link](https://go/my-short-link)
 
 
+# Features
+
 This project demonstrates:
 
 * Hermetically building, running, testing, type checking, linting, and auto-formatting
-  a Python codebase, as well as measuring code coverage, using Bazel.
+  a Python codebase, as well as measuring code coverage,
+  using modern, idiomatic Python and Bazel workflows.
 
-* Bazel managing the creation of native Python virtualenvs automatically,
-  with local VSCode configuration to find the app's Python environment out-of-the-box.
+* Bazel managing native Python virtual environments
+  and installing Python package dependencies (wheels or sdists from PyPI)
+  in them automatically, in a reproducible, fast, and cache-friendly fashion.
 
-* Project-local VSCode configuration to enable e.g.
+  * [uv](https://docs.astral.sh/uv/) is used via [rules_uv](https://github.com/theoremlp/rules_uv)
+    to make environment creation, dependency resolution, and installation 100x faster
+    than with pip/pip-tools (currently used by rules_python and aspect's rules_py;
+    [rules_python is working toward uv support](https://github.com/bazelbuild/rules_python/issues/1975)).
+
+* VSCode configuration to enable e.g.
   discovering the Python environment that Bazel manages
-  (so you can "go to definition" across third-party imports),
+  (so you can "go to definition", see usage errors, etc. across third-party imports),
   discovering tests and running them via VSCode's "Testing" UI,
   and using the VSCode Python debugger, out-of-the-box.
 
 * Using `pytest` via Bazel, with associated VSCode integration,
   for an idiomatic Python testing experience.
 
-* Using Bazel to manage pip dependency lockfiles via `uv`
-  for extremely fast dependency resolution.
-
-* Using Bazel to hermetically fetch and drive mypy for type checking,
+* Using Bazel to hermetically fetch and drive
   [ruff](https://docs.astral.sh/ruff/) for linting and formatting Python code,
-  and [buildifier](https://github.com/bazelbuild/buildtools/blob/master/buildifier/README.md)
-  for formatting Starlark.
+  [buildifier](https://github.com/bazelbuild/buildtools/blob/master/buildifier/README.md)
+  for formatting Starlark,
+  and mypy for type checking.
+  (TODO: try the new [rules_mypy](https://github.com/theoremlp/rules_mypy))
 
-* Building an efficient container image for a Python application via
+* Building an efficient [container](./container) image for a Python application via
   [rules_oci](https://github.com/bazel-contrib/rules_oci/blob/main/docs/python.md).
 
 
