@@ -5,7 +5,7 @@ blinker==1.8.2
 click==8.1.7
     # via flask
 flask==3.0.3
-    # via -r requirements/base.in
+    # via -r base.in
 h11==0.14.0
     # via
     #   hypercorn
@@ -15,7 +15,7 @@ h2==4.1.0
 hpack==4.0.0
     # via h2
 hypercorn==0.17.3
-    # via -r requirements/base.in
+    # via -r base.in
 hyperframe==6.0.1
     # via h2
 itsdangerous==2.2.0
@@ -28,7 +28,7 @@ markupsafe==2.1.5
     #   werkzeug
 priority==2.0.0
     # via hypercorn
-werkzeug==3.0.3
+werkzeug==3.0.6
     # via flask
 wsproto==1.2.0
     # via hypercorn
