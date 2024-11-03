@@ -1,13 +1,15 @@
 # Prefer aspect_rules_py's py_binary over rules_python's as it installs pip deps
 # into a standard virtualenv that VSCode recognizes automatically.
+# TODO: CHeck if the caveat below is still true as of rules_py's move to uv:
 # Caveat: aspect_rules_py's py_binary depends on a newer glibc than is available on RHEL7.
 # Can switch back to rules_python's py_binary if this is an issue.
-load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_pytest_main")
+load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_image_layer", "py_pytest_main")
 load("@pip_base_deps//:requirements.bzl", base_deps = "all_requirements")
 load("@pip_dev_deps//:requirements.bzl", dev_deps = "all_requirements")
 load("@pip_test_deps//:requirements.bzl", test_deps = "all_requirements")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load")
 
-# Does not work with coverage:
+# Does not work with coverage (ref: https://github.com/aspect-build/rules_py/issues/353):
 # load("@aspect_rules_py//py:defs.bzl", "py_test")
 # ...so use rules_python's py_test rule instead:
 load("@rules_python//python:py_test.bzl", "py_test")
@@ -29,8 +31,25 @@ py_binary(
         "FLASK_DEBUG": "1",
         "WERKZEUG_DEBUG_PIN": "off",
     },
-    visibility = ["//visibility:public"],
+    # Add test and dev deps so they end up in the :app.dev.venv target for interactive development.
     deps = base_deps + test_deps + dev_deps,
+)
+
+oci_image(
+    name = "image",
+    base = "@ubuntu",
+    entrypoint = ["/app"],
+    tars = py_image_layer(
+        name = "image_layer",
+        py_binary = ":app",
+        root = "/",
+    ),
+)
+
+oci_load(
+    name = "image_load",
+    image = ":image",
+    repo_tags = ["app:latest"],
 )
 
 py_pytest_main(
