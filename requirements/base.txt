@@ -22,13 +22,13 @@ itsdangerous==2.2.0
     # via flask
 jinja2==3.1.4
     # via flask
-markupsafe==2.1.5
+markupsafe==3.0.2
     # via
     #   jinja2
     #   werkzeug
 priority==2.0.0
     # via hypercorn
-werkzeug==3.0.3
+werkzeug==3.1.2
     # via flask
 wsproto==1.2.0
     # via hypercorn
