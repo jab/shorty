@@ -1,8 +1,5 @@
 # Prefer aspect_rules_py's py_binary over rules_python's as it installs pip deps
 # into a standard virtualenv that VSCode recognizes automatically.
-# TODO: CHeck if the caveat below is still true as of rules_py's move to uv:
-# Caveat: aspect_rules_py's py_binary depends on a newer glibc than is available on RHEL7.
-# Can switch back to rules_python's py_binary if this is an issue.
 load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_image_layer", "py_pytest_main")
 load("@pip_base_deps//:requirements.bzl", base_deps = "all_requirements")
 load("@pip_dev_deps//:requirements.bzl", dev_deps = "all_requirements")

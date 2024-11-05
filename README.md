@@ -29,9 +29,9 @@ This project demonstrates:
   in them automatically, in a reproducible, fast, and cache-friendly fashion.
 
   * [uv](https://docs.astral.sh/uv/) is used via [rules_uv](https://github.com/theoremlp/rules_uv)
-    to make environment creation, dependency resolution, and installation 100x faster
-    than with pip/pip-tools (currently used by rules_python and aspect's rules_py;
-    [rules_python is working toward uv support](https://github.com/bazelbuild/rules_python/issues/1975)).
+    to make lockfile generation 100x faster than with pip-tools,
+    which is what rules_python currently uses
+    (though [they are working toward uv support](https://github.com/bazelbuild/rules_python/issues/1975)).
 
 * VSCode configuration to enable e.g.
   discovering the Python environment that Bazel manages
@@ -154,19 +154,21 @@ The process of updating test- and dev-time dependencies is similar,
 except using the corresponding requirements files and targets instead of `base`.
 
 
+## Upgrading existing dependencies
+
+Run the `*.update` corresponding to the depset you want to upgrade, e.g.
+```
+bazel run //requirements:compile_base_deps.update
+```
+
+
 ## Build and run a container image
 
-1. Build the image: `bazel build //container:oci_image`
+1. Build the image: `bazel build :image`
 
-1. Load it into podman: `podman load -i bazel-bin/container/oci_image`
+1. Load it into podman: `bazel run :image_load`
 
-   This should output something like the following at the end:
-   ```
-   Loaded image: sha256:2eb15062c3199b82e92a53d3cb9b1da93d26176c9d7c02788a68356957aaa51c
-   ```
-
-1. Run it: `podman run --publish=8675:8675 2eb1`
-   (replace 28b1 with whatever sha was output by the previous step)
+1. Run it: `docker run --rm -p 8675:8675 app:latest`
 
 1. You should now be able to access the server running inside the container:
    `curl localhost:8675`
