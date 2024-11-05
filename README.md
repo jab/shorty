@@ -55,6 +55,10 @@ This project demonstrates:
 
 ## Quick start
 
+Ensure you have [installed bazelisk](https://github.com/bazelbuild/bazelisk#installation),
+and either create a symlink from `bazel` to `bazelisk` (recommended),
+or replace `bazel` with `bazelisk` in the commands below.
+
 Run the app:
 ```
 bazel run :app
@@ -136,6 +140,8 @@ Examples:
 
 This can be set up as a pre-commit hook
 and as a PR merge check if desired.
+
+TODO: Make the pre-commit hooks run faster.
 
 
 ## Taking additional dependencies
