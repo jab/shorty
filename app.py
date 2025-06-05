@@ -15,7 +15,6 @@ from flask import redirect
 from flask import render_template
 from flask import request
 
-
 DEFAULT_CONFIG = {
     "SQLITE_DB_URI": "file:/tmp/shorty.db",
 }

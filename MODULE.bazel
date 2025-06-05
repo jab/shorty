@@ -1,5 +1,5 @@
 bazel_dep(name = "rules_python", version = "0.37.2")
-bazel_dep(name = "aspect_rules_py", version = "1.0.0-rc1")
+bazel_dep(name = "aspect_rules_py", version = "1.5.2")
 bazel_dep(name = "aspect_rules_lint", version = "1.0.3")
 bazel_dep(name = "rules_multitool", version = "0.13.0")
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
@@ -37,7 +37,7 @@ use_repo(multitool, "multitool")
 #####################################################################################
 # For building an efficient container image:
 bazel_dep(name = "rules_oci", version = "2.0.1")
-bazel_dep(name = "aspect_bazel_lib", version = "2.9.3")
+bazel_dep(name = "aspect_bazel_lib", version = "2.16.0")
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 oci.pull(
