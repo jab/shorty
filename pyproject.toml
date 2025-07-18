@@ -16,3 +16,4 @@ dependencies = [
 
 # See https://docs.astral.sh/ruff/configuration/
 [tool.ruff]
+line-length = 100
