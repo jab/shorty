@@ -3,19 +3,19 @@ repos:
   hooks:
   - id: format
     name: Format
-    entry: bazelisk run //tools/format:format
+    entry: aspect run //tools/format:format
     language: system
     pass_filenames: false
     types: [text]
   - id: lint
     name: Lint
-    entry: bazelisk lint :all
+    entry: aspect lint :all
     language: system
     pass_filenames: false
     types: [text]
   - id: mypy
     name: mypy
-    entry: bazelisk run //:mypy
+    entry: aspect run //:mypy
     language: system
     pass_filenames: false
     types: [text]

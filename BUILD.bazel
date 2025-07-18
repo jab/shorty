@@ -59,10 +59,9 @@ py_test_name_by_src = {i: i.replace(".py", "") for i in glob(["*_test.py"])}
         timeout = "short",
         srcs = [
             "conftest.py",
-            ":__test__",
             src,
         ],
-        main = ":__test__.py",
+        pytest_main = True,
         deps = [":app"] + test_deps,
     )
     for (src, name) in py_test_name_by_src.items()
