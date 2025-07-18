@@ -10,7 +10,8 @@ version = "0"
 # Therefore we only need to constrain versions when some ranges
 # of dependency versions are not compatible.
 dependencies = [
-
+    "flask",
+    "hypercorn",
 ]
 
 # See https://docs.astral.sh/ruff/configuration/

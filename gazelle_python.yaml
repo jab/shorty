@@ -6,11 +6,25 @@
 ---
 manifest:
   modules_mapping:
+    blinker: blinker
+    click: click
+    flask: flask
+    h11: h11
+    h2: h2
+    hpack: hpack
+    hypercorn: hypercorn
+    hyperframe: hyperframe
     iniconfig: iniconfig
+    itsdangerous: itsdangerous
+    jinja2: jinja2
+    markupsafe: MarkupSafe
     packaging: packaging
     pluggy: pluggy
+    priority: priority
     py: pytest
     pygments: pygments
     pytest: pytest
+    werkzeug: werkzeug
+    wsproto: wsproto
   pip_repository:
     name: pip
