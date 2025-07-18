@@ -1,0 +1,16 @@
+configure:
+  languages:
+    python: true
+  plugins:
+    - .aspect/cli/shell.star
+    - .aspect/cli/pytest_main.star
+    - .aspect/cli/py3_image.star
+lint:
+  aspects:
+    - //tools/lint:linters.bzl%shellcheck
+    - //tools/lint:linters.bzl%ruff
+
+plugins:
+    - name: fix-visibility
+      from: github.com/aspect-build/plugin-fix-visibility
+      version: v0.1.0

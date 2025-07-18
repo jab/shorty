@@ -1,0 +1,39 @@
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+
+"""
+Build supporting tools.
+
+The tools subpackage is used to define build rules and configurations for tools
+used throughout the repository. Firstparty tools not required for build support
+should live elsewhere.
+
+Of special note is that we're using the `bazel_env.bzl` tool to re-export tools
+used under Bazel as a `bin/` tree which can be added to the `$PATH`. The
+included `.envrc` automates this for you.
+
+"""
+
+load("@bazel_env.bzl", "bazel_env")
+load("@bazelrc-preset.bzl", "bazelrc_preset")
+load("@multitool//:tools.bzl", MULTITOOL_TOOLS = "TOOLS")
+
+package(default_visibility = ["//visibility:public"])
+
+bazelrc_preset(name = "preset")
+
+bazel_env(
+    name = "bazel_env",
+    toolchains = {
+        "python": "@rules_python//python:current_py_toolchain",
+    },
+    tools = {
+        # Mapping from tool binary name ($PATH entry) to Bazel label
+        "buildifier": "@buildifier_prebuilt//:buildifier",
+        "python": "$(PYTHON3)",
+    } | MULTITOOL_TOOLS,
+)
+
+sh_binary(
+    name = "workspace_statu",
+    srcs = ["workspace_status.sh"],
+)
