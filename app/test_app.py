@@ -45,3 +45,9 @@ def test_create_short_link(client: FlaskClient) -> None:
     resp = client.post("/", data={"key": "foo", "target": "http://baz"})
     assert resp.status_code == 400
     assert b"already exists" in resp.data
+
+
+def test_create_with_invalid_input_should_fail(client: FlaskClient) -> None:
+    resp = client.post("/", data={"invalid": "input"})
+    assert resp.status_code == 400
+    assert b"Error: Key or target missing for short link" in resp.data
