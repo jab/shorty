@@ -13,6 +13,8 @@ MODULE.bazel.lock
 /bazel-*
 
 
-
+__pycache__
+.DS_Store
 *.venv/
-
+.*.venv
+*.egg-info

@@ -1,13 +1,9 @@
-# GENERATED FILE - DO NOT EDIT!
-#
-# To update this file, run:
-#   bazel run //:gazelle_python_manifest.update
-
----
 manifest:
   modules_mapping:
     blinker: blinker
+    build: build
     click: click
+    colorama: colorama
     flask: flask
     h11: h11
     h2: h2
@@ -17,13 +13,16 @@ manifest:
     iniconfig: iniconfig
     itsdangerous: itsdangerous
     jinja2: jinja2
-    markupsafe: MarkupSafe
+    markupsafe: markupsafe
     packaging: packaging
     pluggy: pluggy
     priority: priority
     py: pytest
     pygments: pygments
+    pyproject_hooks: pyproject_hooks
     pytest: pytest
+    pytest_shard: pytest_shard
+    setuptools: setuptools
     werkzeug: werkzeug
     wsproto: wsproto
   pip_repository:

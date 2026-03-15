@@ -1,17 +1,19 @@
-bazel_dep(name = "aspect_bazel_lib", version = "2.17.1")
-bazel_dep(name = "aspect_rules_lint", version = "1.5.1")
-bazel_dep(name = "aspect_rules_py", version = "1.6.0")
-bazel_dep(name = "bazel_env.bzl", version = "0.4.0")
-bazel_dep(name = "bazelrc-preset.bzl", version = "1.0.1")
-bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
+bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
+bazel_dep(name = "aspect_rules_py", version = "1.9.1")
 bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "rules_multitool", version = "1.7.0")
+bazel_dep(name = "rules_multitool", version = "1.11.1")
 bazel_dep(name = "rules_oci", version = "2.2.6")
-bazel_dep(name = "rules_python", version = "1.5.1")
-bazel_dep(name = "rules_python_gazelle_plugin", version = "1.5.1")
-bazel_dep(name = "rules_shell", version = "0.5.0")
-bazel_dep(name = "rules_uv", version = "0.82.0")
-bazel_dep(name = "tar.bzl", version = "0.3.3")
+bazel_dep(name = "rules_python", version = "1.9.0")
+bazel_dep(name = "rules_shell", version = "0.6.1")
+bazel_dep(name = "tar.bzl", version = "0.5.5")
+
+# Dev-only dependencies
+bazel_dep(name = "aspect_rules_lint", version = "2.3.0", dev_dependency = True)
+bazel_dep(name = "bazel_env.bzl", version = "0.7.1", dev_dependency = True)
+bazel_dep(name = "bazelrc-preset.bzl", version = "1.9.2", dev_dependency = True)
+bazel_dep(name = "buildifier_prebuilt", version = "8.2.1.2", dev_dependency = True)
+bazel_dep(name = "rules_mypy", version = "0.40.0", dev_dependency = True)
+bazel_dep(name = "rules_pkg", version = "1.1.0", dev_dependency = True)
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")
@@ -19,20 +21,27 @@ use_repo(multitool, "multitool")
 
 #########################
 # Hermetic Python interpreter and pip dependencies
-pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+PY_VER = "3.14"
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
-    python_version = "3.12",
+    is_default = True,
+    python_version = PY_VER,
 )
 
-pip.parse(
+# Primary dependency hub using uv.lock.
+# See https://github.com/aspect-build/rules_py/blob/main/docs/uv.md
+uv = use_extension("@aspect_rules_py//uv/unstable:extension.bzl", "uv")
+uv.declare_hub(hub_name = "pip")
+uv.project(
     hub_name = "pip",
-    python_version = "3.12",
-    requirements_lock = "//requirements:all.txt",
+    lock = "//:uv.lock",
+    pyproject = "//:pyproject.toml",
 )
-use_repo(pip, "pip")
+use_repo(uv, "pip")
 
+#########################
+# For building container images
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 oci.pull(
     name = "python_base",

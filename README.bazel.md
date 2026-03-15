@@ -4,8 +4,8 @@ This repository uses [Aspect Workflows](https://aspect.build) to provide an exce
 
 ## Formatting code
 
-- Run `aspect run format` to re-format all files locally.
-- Run `aspect run format path/to/file` to re-format a single file.
+- Run `bazelisk run format` to re-format all files locally.
+- Run `bazelisk run format path/to/file` to re-format a single file.
 - Run `pre-commit install` to auto-format changed files on `git commit`.
 - For CI verification, setup `format` task, see https://docs.aspect.build/workflows/features/lint#formatting## Linting code
 
@@ -16,7 +16,7 @@ You can print the report files to the terminal in a couple ways, as follows.
 The Aspect CLI provides the [`lint` command](https://docs.aspect.build/cli/commands/aspect_lint) but it is *not* part of the Bazel CLI provided by Google.
 The command collects the correct report files, presents them with colored boundaries, gives you interactive suggestions to apply fixes, produces a matching exit code, and more.
 
-- Run `aspect lint //...` to check for lint violations.
+- Run `bazelisk lint //...` to check for lint violations.
 
 ## Installing dev tools
 
@@ -30,7 +30,7 @@ See https://blog.aspect.build/run-tools-installed-by-bazel for details.
 
 ## Working with Python packages
 
-After adding a new `import` statement in Python code, run `aspect configure` to update the BUILD file.
+After adding a new `import` statement in Python code, run `bazelisk configure` to update the BUILD file.
 
 If the package is not already a dependency of the project, you have to do some additional steps:
 

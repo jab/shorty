@@ -170,6 +170,18 @@
       }
     ]
   },
+  "uv": {
+    "binaries": [
+      {
+        "kind": "archive",
+        "url": "https://github.com/astral-sh/uv/releases/download/0.10.9/uv-x86_64-unknown-linux-gnu.tar.gz",
+        "file": "uv-x86_64-unknown-linux-gnu/uv",
+        "sha256": "20d79708222611fa540b5c9ed84f352bcd3937740e51aacc0f8b15b271c57594",
+        "os": "linux",
+        "cpu": "x86_64"
+      }
+    ]
+  },
   "yq": {
     "binaries": [
       {

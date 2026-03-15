@@ -3,6 +3,6 @@ repos:
   hooks:
   - id: format
     name: Format
-    entry: aspect run //tools/format:format
+    entry: bazelisk run //tools/format:format
     language: system
     types: [text]

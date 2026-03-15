@@ -17,20 +17,13 @@ filegroup(
     srcs = glob(["templates/*.j2"]),
 )
 
-py_pytest_main(
-    name = "__test__",
-    deps = ["@pip//pytest"],
-)
-
 py_test(
     name = "app_test",
     srcs = [
         "test_app.py",
-        ":__test__",
     ],
-    main = ":__test__.py",
+    pytest_main = True,
     deps = [
-        ":__test__",
         ":app_bin",
         "@pip//flask",
         "@pip//pytest",
